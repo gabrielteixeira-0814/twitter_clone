@@ -59,7 +59,7 @@ class Usuario extends Model {
 		$stmt->bindValue(':email', $this->__get('email'));
 		$stmt->execute();
 
-		return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+		return $stmt->fetchAll(\PDO::FETCH_ASSOC); // RETORNA EM FORMATO DE ARRAY
 	}
 
 	// Autenticação
@@ -71,7 +71,7 @@ class Usuario extends Model {
 		$stmt->bindValue(':senha', $this->__get('senha'));
 		$stmt->execute();
 
-		$usuario = $stmt->fetch(\PDO::FETCH_ASSOC);
+		$usuario = $stmt->fetch(\PDO::FETCH_ASSOC); // RETORNA EM FORMATO DE ARRAY
 
 		if($usuario['id'] != '' && $usuario['nome'] != '') {
 			$this->__set('id', $usuario['id']);
@@ -79,6 +79,50 @@ class Usuario extends Model {
 		}
 
 		return $this;
+	}
+	public function getAll() {
+		$query = "
+			select
+				id, nome, email 
+			from 
+				usuarios 
+			where 
+				nome like :nome and id != :id_usuario
+			";
+		$stmt = $this->db->prepare($query);
+		$stmt->bindValue(':nome', '%'.$this->__get('nome').'%'); // "%" SERVE PARA PESQUISAR PALAVRAS ENTRE %
+		$stmt->bindValue(':id_usuario', $this->__get('id')); 
+		$stmt->execute();
+ 
+		return $stmt->fetchAll(\PDO::FETCH_ASSOC); // RETORNA EM FORMATO DE ARRAY
+	}
+
+	public function seguirUsuario($id_usuario_seguindo) {
+		$query = 
+			"insert into
+				 usuarios_seguidores(id_usuario, id_usuario_seguindo)
+			values
+				(:id_usuario, :id_usuario_seguindo)
+			";
+		$stmt = $this->db->prepare($query);
+		$stmt->bindValue(':id_usuario', $this->__get('id'));
+		$stmt->bindValue(':id_usuario_seguindo', $id_usuario_seguindo);
+		$stmt->execute();
+
+		return true;
+	}
+
+	public function deixarSeguirUsuario($id_usuario_seguindo) {
+		$query = 
+			"delete from
+				 usuarios_seguidores
+			where
+				id_usuario = :id_usuario and id_usuario_seguindo = :id_usuario_seguindo;
+			";
+		$stmt = $this->db->prepare($query);
+		$stmt->bindValue(':id_usuario', $this->__get('id'));
+		$stmt->bindValue(':id_usuario_seguindo', $id_usuario_seguindo);
+		$stmt->execute();
 	}
 }
 
