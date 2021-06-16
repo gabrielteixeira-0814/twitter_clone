@@ -23,8 +23,30 @@ class AppController extends Action {
         // Recuperação  dos tweets
         $tweet = Container::getModel('Tweet');
         $tweet->__set('id_usuario', $_SESSION['id']);
-        $tweets = $tweet->getAll();
+      
+        // variaveis de paginação
+        $total_registros_pagina = 10;
+        $deslogamento = 0;
+        $pagina = 1;
+
+        // ---
+        $total_registros_pagina = 10; // limit
+        $deslogamento = 10;
+        $pagina = 2; // pagina 2
+
+         // ---
+         $total_registros_pagina = 10; // limit
+         $deslogamento = 20;
+         $pagina = 3; // pagina 2
+
+        echo "<br/><br/><br/>Página: $pagina | Total de registros por página: $total_registros_pagina | Deslogamento: $deslogamento";
+        // $tweets = $tweet->getAll();
+        $tweets = $tweet->getPorPagina($total_registros_pagina, $deslogamento);
         $this->view->tweets = $tweets;
+
+
+
+
 
         $usuario = Container::getModel('Usuario');
 
