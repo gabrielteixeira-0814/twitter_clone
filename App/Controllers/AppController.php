@@ -30,7 +30,7 @@ class AppController extends Action {
         $pagina = isset($_GET['pagina']) ? $_GET['pagina'] : 1; // paginas
         $deslogamento = ($pagina - 1) * $total_registros_pagina;
 
-        echo "<br/><br/><br/>Página: $pagina | Total de registros por página: $total_registros_pagina | Deslogamento: $deslogamento";
+        // echo "<br/><br/><br/>Página: $pagina | Total de registros por página: $total_registros_pagina | Deslogamento: $deslogamento";
         // $tweets = $tweet->getAll();
         $tweets = $tweet->getPorPagina($total_registros_pagina, $deslogamento);
         $total_tweets = $tweet->getTotalRegistros();
