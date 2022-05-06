@@ -3,7 +3,7 @@
 </h1>
 
 <h1>
-  <img src="public/img/vendas.gif" />
+  <img src="public/img/twitterGif.gif" />
 </h1>
 
 
